@@ -9,7 +9,7 @@ const getAllMessages = (callback) => {
       message,
       created_at
     FROM contacts
-    ORDER BY created_at DESC
+    ORDER BY id DESC
   `;
 
   db.query(sql, callback);
@@ -17,18 +17,33 @@ const getAllMessages = (callback) => {
 
 const createMessage = (data, callback) => {
   const sql = `
-    INSERT INTO contacts (name, email, message)
+    INSERT INTO contacts
+    (name, email, message)
     VALUES (?, ?, ?)
   `;
 
   db.query(
     sql,
-    [data.name, data.email, data.message],
+    [
+      data.name,
+      data.email,
+      data.message,
+    ],
     callback
   );
+};
+
+const deleteMessage = (id, callback) => {
+  const sql = `
+    DELETE FROM contacts
+    WHERE id = ?
+  `;
+
+  db.query(sql, [id], callback);
 };
 
 module.exports = {
   getAllMessages,
   createMessage,
+  deleteMessage,
 };

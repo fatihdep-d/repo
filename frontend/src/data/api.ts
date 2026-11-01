@@ -1,5 +1,9 @@
 const API_URL = "http://localhost:5000/api";
 
+/* =========================
+   INTERFACES
+========================= */
+
 export interface Project {
   id: number;
   title: string;
@@ -16,6 +20,7 @@ export interface Skill {
   name: string;
   level: string;
   percentage: number;
+  group_id: number;
   group_title: string;
   group_icon: string;
 }
@@ -65,7 +70,14 @@ export interface DashboardStats {
   contacts: number;
 }
 
-async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
+/* =========================
+   HELPER
+========================= */
+
+async function fetchJson<T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> {
   const response = await fetch(url, {
     ...options,
     cache: "no-store",
@@ -73,11 +85,18 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || `Request failed: ${response.status}`);
+
+    throw new Error(
+      text || `Request failed: ${response.status}`
+    );
   }
 
   return response.json();
 }
+
+/* =========================
+   PROJECTS - PUBLIC
+========================= */
 
 export async function fetchProjects(): Promise<Project[]> {
   const result = await fetchJson<{
@@ -100,6 +119,71 @@ export async function fetchProjects(): Promise<Project[]> {
   }));
 }
 
+/* =========================
+   PROJECTS - ADMIN CRUD
+========================= */
+
+export async function createProject(data: {
+  title: string;
+  category: string;
+  description: string;
+  tech: string[];
+  demo_url: string;
+  github_url: string;
+  image: string;
+}) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/projects`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateProject(
+  id: number,
+  data: {
+    title: string;
+    category: string;
+    description: string;
+    tech: string[];
+    demo_url: string;
+    github_url: string;
+    image: string;
+  }
+) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/projects/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteProject(id: number) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/projects/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/* =========================
+   SKILLS - PUBLIC
+========================= */
+
 export async function fetchSkills(): Promise<SkillGroup[]> {
   const result = await fetchJson<{
     success: boolean;
@@ -117,15 +201,98 @@ export async function fetchSkills(): Promise<SkillGroup[]> {
       });
     }
 
+    // Memberikan nilai realistis jika persentase di database bernilai 0 atau kosong
+    let val = Number(skill.percentage);
+    if (!val || val === 0) {
+      const nameLower = skill.name.toLowerCase();
+      if (nameLower.includes("html") || nameLower.includes("css") || nameLower.includes("vs code")) {
+        val = 80;
+      } else if (nameLower.includes("javascript") || nameLower.includes("mysql") || nameLower.includes("express")) {
+        val = 70;
+      } else if (nameLower.includes("react") || nameLower.includes("node") || nameLower.includes("figma")) {
+        val = 65;
+      } else {
+        val = 60;
+      }
+    }
+
     grouped.get(skill.group_title)!.skills.push({
       name: skill.name,
       level: skill.level,
-      percentage: skill.percentage,
+      percentage: val,
     });
   });
 
   return Array.from(grouped.values());
 }
+
+/* =========================
+   SKILLS - ADMIN CRUD
+========================= */
+
+export async function fetchAdminSkills(): Promise<Skill[]> {
+  const result = await fetchJson<{
+    success: boolean;
+    data: Skill[];
+  }>(`${API_URL}/skills`);
+
+  return result.data;
+}
+
+export async function createSkill(data: {
+  name: string;
+  level: string;
+  percentage: number;
+  group_id: number;
+}) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/skills`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateSkill(
+  id: number,
+  data: {
+    name: string;
+    level: string;
+    percentage: number;
+    group_id: number;
+  }
+) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/skills/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteSkill(id: number) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/skills/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/* =========================
+   CERTIFICATES - PUBLIC
+========================= */
 
 export async function fetchCertificates(): Promise<Certificate[]> {
   const result = await fetchJson<{
@@ -143,6 +310,67 @@ export async function fetchCertificates(): Promise<Certificate[]> {
   }));
 }
 
+/* =========================
+   CERTIFICATES - ADMIN CRUD
+========================= */
+
+export async function createCertificate(data: {
+  title: string;
+  issuer: string;
+  date: string;
+  credential_id: string;
+  verification_url: string;
+}) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/certificates`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateCertificate(
+  id: number,
+  data: {
+    title: string;
+    issuer: string;
+    date: string;
+    credential_id: string;
+    verification_url: string;
+  }
+) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/certificates/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteCertificate(id: number) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/certificates/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/* =========================
+   TESTIMONIALS - PUBLIC
+========================= */
+
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   const result = await fetchJson<{
     success: boolean;
@@ -151,6 +379,78 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
 
   return result.data;
 }
+
+/* =========================
+   TESTIMONIALS - ADMIN CRUD
+========================= */
+
+export async function fetchAdminTestimonials(): Promise<Testimonial[]> {
+  const result = await fetchJson<{
+    success: boolean;
+    data: Testimonial[];
+  }>(`${API_URL}/testimonials`);
+
+  return result.data;
+}
+
+export async function createTestimonial(data: {
+  name: string;
+  role: string;
+  company: string;
+  avatar: string;
+  stars: number;
+  quote: string;
+}) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/testimonials`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateTestimonial(
+  id: number,
+  data: {
+    name: string;
+    role: string;
+    company: string;
+    avatar: string;
+    stars: number;
+    quote: string;
+  }
+) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/testimonials/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteTestimonial(id: number) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/testimonials/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/* =========================
+   MESSAGES - PUBLIC
+========================= */
 
 export async function sendMessage(data: {
   name: string;
@@ -170,6 +470,10 @@ export async function sendMessage(data: {
   });
 }
 
+/* =========================
+   MESSAGES - ADMIN
+========================= */
+
 export async function fetchMessages(): Promise<ContactMessage[]> {
   const result = await fetchJson<{
     success: boolean;
@@ -178,6 +482,20 @@ export async function fetchMessages(): Promise<ContactMessage[]> {
 
   return result.data;
 }
+
+export async function deleteMessage(id: number) {
+  return fetchJson<{
+    success: boolean;
+    message: string;
+    data: any;
+  }>(`${API_URL}/messages/${id}`, {
+    method: "DELETE",
+  });
+}
+
+/* =========================
+   DASHBOARD
+========================= */
 
 export async function fetchDashboardStats(): Promise<DashboardStats> {
   const result = await fetchJson<{

@@ -2,8 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { getCertificates, Certificate } from "../../mockData";
 import SkeletonCard from "../../components/SkeletonCard";
+
+interface Certificate {
+  id: number;
+  title: string;
+  issuer: string;
+  date: string;
+  credential_id: string;
+  verification_url: string;
+  created_at: string;
+}
 
 export default function CertificatePage() {
   const [certificatesList, setCertificatesList] = useState<Certificate[]>([]);
@@ -14,9 +23,17 @@ export default function CertificatePage() {
       try {
         setLoading(true);
 
-        const data = await getCertificates();
+        const response = await fetch(
+          "http://localhost:5000/api/certificates"
+        );
 
-        setCertificatesList(data);
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data certificates");
+        }
+
+        const result = await response.json();
+
+        setCertificatesList(result.data);
       } catch (error) {
         console.error("Failed to fetch certificates:", error);
       } finally {
@@ -51,16 +68,25 @@ export default function CertificatePage() {
 
           {/* Skeleton Loader */}
           {loading ? (
-            Array.from({ length: 3 }).map((_, i) => (
+            Array.from({ length: 5 }).map((_, i) => (
               <SkeletonCard
                 key={i}
                 variant="certificate"
               />
             ))
+          ) : certificatesList.length === 0 ? (
+
+            /* Jika tidak ada data */
+            <div className="col-span-full text-center py-20">
+              <p className="text-gray-400">
+                Belum ada data certificate.
+              </p>
+            </div>
+
           ) : (
 
             /* Certificate Data */
-            certificatesList.slice(0, 3).map((cert) => (
+            certificatesList.map((cert) => (
               <div
                 key={cert.id}
                 className="group rounded-2xl bg-gray-900/50 border border-gray-800/50 overflow-hidden hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300"
@@ -103,14 +129,14 @@ export default function CertificatePage() {
                       <span className="font-medium text-gray-400">
                         ID Kredensial:{" "}
                       </span>
-                      {cert.credentialId}
+                      {cert.credential_id}
                     </div>
                   </div>
 
                   {/* Verification */}
                   <div className="mt-6 pt-4 border-t border-gray-800/50">
                     <a
-                      href={cert.verificationUrl}
+                      href={cert.verification_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm font-semibold text-white hover:text-indigo-400 transition-colors duration-300"

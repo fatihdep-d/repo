@@ -44,22 +44,23 @@ export interface Testimonial {
 // =========================
 // PROJECTS
 // =========================
+// =========================
+// PROJECTS
+// =========================
 
 const projects: Project[] = [
   {
     id: 1,
-    title: "SIJA App",
-    category: "Web Dev",
+    title: "RingKita",
+    category: "Mobile App",
     description:
-      "SIJA App adalah aplikasi kasir sederhana yang dirancang untuk membantu mengelola produk, transaksi penjualan, stok barang, dan data penjualan dalam satu sistem.",
+      "RingKita adalah aplikasi manajemen sasana boxing yang membantu anggota melakukan pembayaran membership dan melakukan absensi latihan secara lebih mudah dan terorganisir.",
     tech: ["Next.js", "Node.js", "Express.js", "MySQL"],
     demoUrl: "#",
-    githubUrl: "https://github.com/obamm1101-commits/sijja-app",
-    image: "/portofolio.jpg",
+    githubUrl: "https://github.com/fatihdep-d/repo",
+    image: "/ringkita.jpg",
   },
 ];
-
-
 // =========================
 // SKILLS
 // =========================
@@ -219,7 +220,7 @@ const testimonials: Testimonial[] = [
     avatar: "👨‍🏫",
     stars: 5,
     quote:
-      "Akram menunjukkan semangat belajar yang baik dan memiliki ketertarikan yang kuat dalam bidang teknologi serta pengembangan aplikasi.",
+      "Fatih menunjukkan semangat belajar yang baik dan memiliki ketertarikan yang kuat dalam bidang teknologi serta pengembangan aplikasi.",
   },
 
   {
@@ -230,7 +231,7 @@ const testimonials: Testimonial[] = [
     avatar: "👨‍🏫",
     stars: 5,
     quote:
-      "Akram memiliki kemauan untuk terus belajar dan mengembangkan kemampuan dalam bidang teknologi serta mampu bekerja sama dengan baik dalam berbagai kegiatan.",
+      "Fatih memiliki kemauan untuk terus belajar dan mengembangkan kemampuan dalam bidang teknologi serta mampu bekerja sama dengan baik dalam berbagai kegiatan.",
   },
 
   {
@@ -241,7 +242,7 @@ const testimonials: Testimonial[] = [
     avatar: "👨‍💻",
     stars: 5,
     quote:
-      "Akram memiliki ketertarikan yang baik terhadap pemrograman dan terus berusaha meningkatkan kemampuan dalam pengembangan aplikasi dan website.",
+      "Fatih memiliki ketertarikan yang baik terhadap pemrograman dan terus berusaha meningkatkan kemampuan dalam pengembangan aplikasi dan website.",
   },
 
   {
@@ -252,7 +253,7 @@ const testimonials: Testimonial[] = [
     avatar: "👨‍🏫",
     stars: 5,
     quote:
-      "Akram cukup aktif dalam mempelajari teknologi web dan menunjukkan perkembangan yang baik dalam mengerjakan tugas serta proyek pemrograman.",
+      "Fatih cukup aktif dalam mempelajari teknologi web dan menunjukkan perkembangan yang baik dalam mengerjakan tugas serta proyek pemrograman.",
   },
 
   {
@@ -263,7 +264,7 @@ const testimonials: Testimonial[] = [
     avatar: "👨‍🏫",
     stars: 5,
     quote:
-      "Akram memiliki semangat belajar yang baik dan terus berusaha mengembangkan kemampuan teknisnya dalam bidang Rekayasa Perangkat Lunak.",
+      "Fatih memiliki semangat belajar yang baik dan terus berusaha mengembangkan kemampuan teknisnya dalam bidang Rekayasa Perangkat Lunak.",
   },
 ];
 

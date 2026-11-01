@@ -96,7 +96,7 @@ export default function Footer() {
               href="/admin"
               className="text-xs text-gray-600 transition hover:text-indigo-400"
             >
-              Admin Panel
+              
             </Link>
           </div>
         </div>

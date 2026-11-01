@@ -40,8 +40,8 @@ export default function About() {
             <div className="relative aspect-square overflow-hidden rounded-2xl border border-slate-800 bg-[#0d1320]">
 
               <Image
-                src="/profile.jpg"
-                alt="Foto profil Akram Rheza"
+                src="/about.jpg"
+                alt="Foto profil Muh Fatih Attaillah"
                 fill
                 priority
                 className="object-cover"
@@ -60,7 +60,7 @@ export default function About() {
                 </span>
 
                 <span className="text-right text-sm font-semibold">
-                  Akram Rheza
+                  Muh Fatih Attaillah
                 </span>
               </div>
 
@@ -212,12 +212,12 @@ export default function About() {
                   </p>
 
                   <h3 className="mt-2 text-lg font-bold">
-                    SMP 31 Makassar
+                    SMP NEGERI 24 MAKASSAR
                   </h3>
 
                   <p className="mt-3 text-sm leading-6 text-slate-400">
                     Menempuh pendidikan tingkat sekolah menengah
-                    pertama di SMP 31 Makassar.
+                    pertama di SMP NEGERI 24 Makassar.
                   </p>
 
                 </div>

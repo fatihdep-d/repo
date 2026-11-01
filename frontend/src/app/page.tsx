@@ -19,7 +19,7 @@ export default function Home() {
         <h1 className="relative mt-10 text-5xl md:text-7xl font-bold leading-tight tracking-tight">
           Halo, Saya{" "}
           <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-            Akram Rheza
+            Fatih Attaillah
           </span>
 
           <br />

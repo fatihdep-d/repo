@@ -204,7 +204,7 @@ export default function ContactPage() {
                 <h2 className="font-bold">Email</h2>
 
                 <p className="mt-2 text-indigo-400">
-                  obamm1101@gmail.com
+                  fatihataillahataillah@gmail.com
                 </p>
 
                 <p className="mt-3 text-sm leading-6 text-slate-500">
@@ -218,7 +218,7 @@ export default function ContactPage() {
                 <h2 className="font-bold">Telepon</h2>
 
                 <p className="mt-2 text-violet-400">
-                  +62 851-2494-0029
+                  +62 821-2269-1813
                 </p>
 
                 <p className="mt-3 text-sm leading-6 text-slate-500">

@@ -1,9 +1,13 @@
-const messageModel = require("../models/messageModel");
+const {
+  getAllMessages,
+  createMessage,
+  deleteMessage,
+} = require("../models/messageModel");
 
 const getMessages = (req, res) => {
-  messageModel.getAllMessages((err, results) => {
+  getAllMessages((err, results) => {
     if (err) {
-      console.error("Get messages error:", err);
+      console.error("Gagal mengambil messages:", err);
 
       return res.status(500).json({
         success: false,
@@ -18,21 +22,29 @@ const getMessages = (req, res) => {
   });
 };
 
-const createMessage = (req, res) => {
-  const { name, email, message } = req.body;
+const sendMessage = (req, res) => {
+  const {
+    name,
+    email,
+    message,
+  } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({
       success: false,
-      message: "Semua field wajib diisi",
+      message: "Nama, email, dan pesan wajib diisi",
     });
   }
 
-  messageModel.createMessage(
-    { name, email, message },
+  createMessage(
+    {
+      name,
+      email,
+      message,
+    },
     (err, result) => {
       if (err) {
-        console.error("Create message error:", err);
+        console.error("Gagal menyimpan pesan:", err);
 
         return res.status(500).json({
           success: false,
@@ -54,7 +66,35 @@ const createMessage = (req, res) => {
   );
 };
 
+const removeMessage = (req, res) => {
+  const { id } = req.params;
+
+  deleteMessage(id, (err, result) => {
+    if (err) {
+      console.error("Gagal menghapus pesan:", err);
+
+      return res.status(500).json({
+        success: false,
+        message: "Gagal menghapus pesan",
+      });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Pesan tidak ditemukan",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Pesan berhasil dihapus",
+    });
+  });
+};
+
 module.exports = {
   getMessages,
-  createMessage,
+  sendMessage,
+  deleteMessage: removeMessage,
 };

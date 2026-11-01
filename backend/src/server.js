@@ -32,13 +32,23 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/hero", heroRoute);
-app.use("/api/projects", projectRoute);
-app.use("/api/messages", messageRoute);
-app.use("/api/skills", skillRoute);
-app.use("/api/certificates", certificateRoute);
-app.use("/api/testimonials", testimonialRoute);
-app.use("/api/dashboard", dashboardRoute);
+// 🔍 PENGECEKAN OTOMATIS: Mendeteksi rute mana yang bernilai undefined / bukan fungsi
+const routesToCheck = {
+  "/api/hero": heroRoute,
+  "/api/projects": projectRoute,
+  "/api/messages": messageRoute,
+  "/api/skills": skillRoute,
+  "/api/certificates": certificateRoute,
+  "/api/testimonials": testimonialRoute,
+  "/api/dashboard": dashboardRoute,
+};
+
+Object.entries(routesToCheck).forEach(([path, routeHandler]) => {
+  if (typeof routeHandler !== "function") {
+    console.error(`❌ ERROR: Route untuk path "${path}" bernilai undefined atau bukan router yang valid! Periksa file routernya.`);
+  }
+  app.use(path, routeHandler);
+});
 
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);
